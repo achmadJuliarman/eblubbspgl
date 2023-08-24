@@ -44,7 +44,7 @@
                     <!-- ============================================================== -->
                     <!-- Logo you can find that scss in header.scss -->
                     <!-- ============================================================== -->
-                    <a href="javascript:void(0)" class="brand-logo">
+                    <a href="<?php echo base_url(); ?>pimpinan" class="brand-logo">
                         <span class="icon">
                             <img class="light-logo" width="150" height="56" src="<?php echo base_url(); ?>assets/new/images/logo-light-icon.png">
                             <img class="dark-logo" src="<?php echo base_url(); ?>assets/new/images/logo-icon.png">

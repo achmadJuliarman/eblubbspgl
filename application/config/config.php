@@ -26,13 +26,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 //$config['base_url'] = "";
 //$config['base_url'] = "http://".$_SERVER['HTTP_HOST']."/monikadev/";
 //$config['base_url'] = "";
-<<<<<<< HEAD
+
 $config['base_url']	= 'http://' . $_SERVER['SERVER_NAME'] . str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
-=======
 
-$config['base_url']    = 'http://' . $_SERVER['SERVER_NAME'] . str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
-
->>>>>>> 4d47a55446e80902aa8285f386fcfe5d92adf5b1
 /*
 |--------------------------------------------------------------------------
 | Index File

@@ -53,15 +53,17 @@ Highcharts.setOptions({
         lang: {
             thousandsSep: ','
         }
+       
     });
 
 Highcharts.chart('container', {
 data: {
-table: 'datatable'
+table: 'datatable' 
 },
 chart: {
 type: 'column'
 },
+colors: ["#7CB5EC", "#90ED7D", "#434348", "#F7A35C"], 
 title: {
 text: 'PENGELOLAAN KEUANGAN BLU <?php echo $nama_satker; ?> Tahun <?php echo $pilih_tahun; ?>'
 },
@@ -69,11 +71,21 @@ yAxis: {
 allowDecimals: false,
 title: {
     text: 'Rupiah'
-}
+},
+labels:{
+        formatter:function(){
+            if(this.value > 0){
+                return this.value / 1000000000 + 'M';
+            }else if(this.value == 0){
+                return this.value
+            }
+        }
+    }
 },
 tooltip: {
         pointFormat: "Rp. {point.y:,.0f}"
     }});
+
 </script>
 <script type="text/javascript">
 Highcharts.setOptions({

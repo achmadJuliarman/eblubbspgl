@@ -359,7 +359,8 @@
                                 </thead>
                                 <tbody>
                                   <?php foreach ($pelaksana_layanan as $a) { ?>
-                                    <?php $target = $this->db->query("SELECT SUM(jumlah) AS jumlah FROM target WHERE id_rumah_layanan = $a->id_rumah_layanan AND tahun = $pilih_tahun")->row();?>
+
+                                   <?php $target = $this->db->query("SELECT SUM(jumlah) AS jumlah FROM target WHERE id_rumah_layanan = $a->id_rumah_layanan AND tahun = $pilih_tahun")->row();?>
                                     <?php $realisasi = $this->db->query("SELECT SUM(t.jumlah_realisasi) AS jumlah FROM termin AS t INNER JOIN kontrak AS k ON t.id_kontrak = k.id_kontrak WHERE k.id_rumah_layanan = $a->id_rumah_layanan AND YEAR(t.tgl_pembayaran) = $pilih_tahun AND t.status_pembayaran=1")->row();?>
                                     <?php $pengeluaran = $this->db->query("SELECT SUM(p.jumlah_realisasi) AS jumlah FROM pengajuan AS p INNER JOIN rencana_operasional AS ro ON p.id_ro = ro.id_ro INNER JOIN kontrak AS k ON ro.id_kontrak = k.id_kontrak WHERE k.id_rumah_layanan = $a->id_rumah_layanan AND p.status_realisasi = 1 AND YEAR(p.tgl_pengajuan) = $pilih_tahun")->row(); ?>
                                     <?php $pengeluaran_rkakl = $this->db->query("SELECT SUM(p.jumlah_realisasi) AS jumlah FROM pengajuan_rkakl AS p INNER JOIN detail_rkakl AS dr ON p.id_detail_rkakl = dr.id INNER JOIN rkakl AS r ON dr.id_rkakl = r.id_rkakl INNER JOIN rumah_layanan AS rl ON r.id_layanan = rl.id_rumah_layanan WHERE r.id_layanan = '$a->id_rumah_layanan' AND p.status_realisasi = 1 AND YEAR(p.tgl_pengajuan) = $pilih_tahun")->row(); ?>

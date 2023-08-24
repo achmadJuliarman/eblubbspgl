@@ -142,7 +142,7 @@
                     <div class="d-flex no-block align-items-center">
                         <div>
                             <h4 class="white-text m-b-5"><?php echo "Rp. ".number_format($surplus,0,'','.' ).",-"; ?></h4>
-                            <h6 class="white-text op-5">SURPLUS</h6>
+                            <h6 class="white-text op-5">SALDO</h6>
                         </div>
                         <div class="ml-auto">
                           <span class="white-text display-6"><i class="material-icons">equalizer</i></span>

@@ -880,7 +880,7 @@ class Bendahara_penerimaan extends CI_Controller {
 		$kategori	= $this->uri->segment(5);
 		$this->db->query("DELETE FROM termin WHERE id_termin = $id_termin");
 		$this->db->query("DELETE FROM kontrak WHERE id_kontrak = $id_kontrak");
-		echo '<script>alert("Data Berhasil Disimpan!");</script>';
+		echo '<script>alert("Data Berhasil Dihapus!");</script>';
 		redirect('bendahara_penerimaan/list_po/'.$kategori, 'refresh');
 	}
 

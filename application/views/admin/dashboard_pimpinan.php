@@ -1,8 +1,13 @@
 <?php $total_pengeluaran = $result_pengeluaran->jumlah + $result_pengeluaran_rkakl->jumlah; ?>
-<?php $total_target = 0;$total_terkontrak=0;$total_invoice=0;$total_realisasi=0;$total_pengeluaran=0;$total_hasil_realisasi=0;$total_piutang=0;?>
+<?php $total_target = 0;
+$total_terkontrak = 0;
+$total_invoice = 0;
+$total_realisasi = 0;
+$total_pengeluaran = 0;
+$total_hasil_realisasi = 0;
+$total_piutang = 0; ?>
 <?php
-  foreach ($pelaksana_layanan as $a)
-  {
+foreach ($pelaksana_layanan as $a) {
     $target = $this->db->query("SELECT SUM(jumlah) AS jumlah FROM target WHERE id_rumah_layanan = $a->id_rumah_layanan AND tahun = $pilih_tahun")->row();
 
     $terkontrak = $this->db->query("SELECT SUM(t.jumlah) AS jumlah FROM termin AS t INNER JOIN kontrak AS k ON t.id_kontrak = k.id_kontrak 
@@ -49,12 +54,12 @@
     $total_realisasi = $total_realisasi + $realisasi->jumlah;
     $total_pengeluaran = $total_pengeluaran + $sub_pengeluaran;
     $surplus = $total_realisasi - $total_pengeluaran;
-  }
+}
 
 ?>
 
 <div class="container-fluid">
-    
+
     <!-- ============================================================== -->
     <!-- Sales Summery -->
     <!-- ============================================================== -->
@@ -64,11 +69,11 @@
                 <div class="card-content">
                     <div class="d-flex no-block align-items-center">
                         <div>
-                            <h4 class="white-text m-b-5"><?php echo "Rp. ".number_format($total_target,0,'','.' ).",-"; ?></h4>
+                            <h4 class="white-text m-b-5"><?php echo "Rp. " . number_format($total_target, 0, '', '.') . ",-"; ?></h4>
                             <h6 class="white-text op-5 light-blue-text">TARGET PENDAPATAN</h6>
                         </div>
                         <div class="ml-auto">
-                          <span class="white-text display-6"><i class="material-icons">equalizer</i></span>
+                            <span class="white-text display-6"><i class="material-icons">equalizer</i></span>
                         </div>
                     </div>
                 </div>
@@ -79,11 +84,11 @@
                 <div class="card-content">
                     <div class="d-flex no-block align-items-center">
                         <div>
-                            <h4 class="white-text m-b-5"><?php echo "Rp. ".number_format($total_terkontrak,0,'','.' ).",-"; ?></h4>
+                            <h4 class="white-text m-b-5"><?php echo "Rp. " . number_format($total_terkontrak, 0, '', '.') . ",-"; ?></h4>
                             <h6 class="white-text op-5">TERKONTRAK</h6>
                         </div>
                         <div class="ml-auto">
-                          <span class="white-text display-6"><i class="material-icons">equalizer</i></span>
+                            <span class="white-text display-6"><i class="material-icons">equalizer</i></span>
                         </div>
                     </div>
                 </div>
@@ -94,7 +99,7 @@
                 <div class="card-content">
                     <div class="d-flex no-block align-items-center">
                         <div>
-                            <h4 class="white-text m-b-5"><?php echo "Rp. ".number_format($total_invoice,0,'','.' ).",-"; ?></h4>
+                            <h4 class="white-text m-b-5"><?php echo "Rp. " . number_format($total_invoice, 0, '', '.') . ",-"; ?></h4>
                             <h6 class="white-text op-5 text-darken-2">INVOICE</h6>
                         </div>
                         <div class="ml-auto">
@@ -109,11 +114,11 @@
                 <div class="card-content">
                     <div class="d-flex no-block align-items-center">
                         <div>
-                            <h4 class="white-text m-b-5"><?php echo "Rp. ".number_format($total_realisasi,0,'','.' ).",-"; ?></h4>
+                            <h4 class="white-text m-b-5"><?php echo "Rp. " . number_format($total_realisasi, 0, '', '.') . ",-"; ?></h4>
                             <h6 class="white-text op-5">REALISASI PENDAPATAN</h6>
                         </div>
                         <div class="ml-auto">
-                          <span class="white-text display-6"><i class="material-icons">equalizer</i></span>
+                            <span class="white-text display-6"><i class="material-icons">equalizer</i></span>
                         </div>
                     </div>
                 </div>
@@ -126,11 +131,11 @@
                 <div class="card-content">
                     <div class="d-flex no-block align-items-center">
                         <div>
-                            <h4 class="white-text m-b-5"><?php echo "Rp. ".number_format($total_pengeluaran,0,'','.' ).",-"; ?></h4>
+                            <h4 class="white-text m-b-5"><?php echo "Rp. " . number_format($total_pengeluaran, 0, '', '.') . ",-"; ?></h4>
                             <h6 class="white-text op-5 light-blue-text">REALISASI BIAYA</h6>
                         </div>
                         <div class="ml-auto">
-                          <span class="white-text display-6"><i class="material-icons">equalizer</i></span>
+                            <span class="white-text display-6"><i class="material-icons">equalizer</i></span>
                         </div>
                     </div>
                 </div>
@@ -141,11 +146,11 @@
                 <div class="card-content">
                     <div class="d-flex no-block align-items-center">
                         <div>
-                            <h4 class="white-text m-b-5"><?php echo "Rp. ".number_format($surplus,0,'','.' ).",-"; ?></h4>
+                            <h4 class="white-text m-b-5"><?php echo "Rp. " . number_format($surplus, 0, '', '.') . ",-"; ?></h4>
                             <h6 class="white-text op-5">SALDO</h6>
                         </div>
                         <div class="ml-auto">
-                          <span class="white-text display-6"><i class="material-icons">equalizer</i></span>
+                            <span class="white-text display-6"><i class="material-icons">equalizer</i></span>
                         </div>
                     </div>
                 </div>
@@ -154,22 +159,22 @@
         <div class="col l4 m8 s16">
             <div class="card success-gradient card-hover">
                 <div class="card-content">
-                  <a href="<?php echo base_url(); ?>pimpinan/detail_piutang_grafik">
-                    <div class="d-flex no-block align-items-center">
-                        <div>
-                            <h4 class="white-text m-b-5"><?php echo "Rp. ".number_format($total_piutang,0,'','.' ).",-"; ?></h4>
-                            <h6 class="white-text op-5 text-darken-2">PIUTANG</h6>
+                    <a href="<?php echo base_url(); ?>pimpinan/detail_piutang_grafik">
+                        <div class="d-flex no-block align-items-center">
+                            <div>
+                                <h4 class="white-text m-b-5"><?php echo "Rp. " . number_format($total_piutang, 0, '', '.') . ",-"; ?></h4>
+                                <h6 class="white-text op-5 text-darken-2">PIUTANG</h6>
+                            </div>
+                            <div class="ml-auto">
+                                <span class="white-text display-6"><i class="material-icons">equalizer</i></span>
+                            </div>
                         </div>
-                        <div class="ml-auto">
-                            <span class="white-text display-6"><i class="material-icons">equalizer</i></span>
-                        </div>
-                    </div>
-                  </a>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <!-- ============================================================== -->
     <!-- Sales Summery -->
     <!-- ============================================================== -->
@@ -182,7 +187,7 @@
                     <div class="p-t-20">
                         <div class="row">
                             <div class="col s12">
-                              <div id="container" style="height: 450px;"></div>
+                                <div id="container" style="height: 450px;"></div>
                             </div>
                         </div>
                     </div>
@@ -201,27 +206,27 @@
                     <div class="d-flex align-items-center">
                         <div>
                             <h5 class="card-title">Detail Informasi</h5>
-                            <h6 class="card-subtitle">Pengelolaan Keuangan BLU</h6>
+                            <h6 class="card-subtitle" style="color: black;"><b>Pengelolaan Keuangan BLU</b></h6>
                         </div>
                         <div class="ml-auto">
-                          <?php echo form_open_multipart('pimpinan');?>
+                            <?php echo form_open_multipart('pimpinan'); ?>
                             <div class="input-field dl support-select">
                                 <select name="tahun">
                                     <?php $tahun = DATE("Y"); ?>
                                     <option value="" selected>Pilih Tahun</option>
                                     <option value="<?php echo $tahun; ?>"><?php echo $tahun; ?></option>
-                                    <option value="<?php echo $tahun-1; ?>"><?php echo $tahun-1; ?></option>
-                                    <option value="<?php echo $tahun-2; ?>"><?php echo $tahun-2; ?></option>
-                                    <option value="<?php echo $tahun-3; ?>"><?php echo $tahun-3; ?></option>
+                                    <option value="<?php echo $tahun - 1; ?>"><?php echo $tahun - 1; ?></option>
+                                    <option value="<?php echo $tahun - 2; ?>"><?php echo $tahun - 2; ?></option>
+                                    <option value="<?php echo $tahun - 3; ?>"><?php echo $tahun - 3; ?></option>
                                 </select>
                             </div>
                             <button class="btn btn-small green btn-outline" type="submit" name="action"><i class="fas fa-search"></i> Pilih</button>
-                          </form>
+                            </form>
                         </div>
                     </div>
                     <div class="table-responsive m-b-20">
                         <table class="">
-                            <thead>
+                            <thead style="color: black;">
                                 <tr>
                                     <th>No</th>
                                     <th>Rumah Layanan</th>
@@ -230,7 +235,7 @@
                                     <th>Invoice</th>
                                     <th>Realisasi Pendapatan</th>
                                     <th>Realisasi Belanja</th>
-                                    <th>Surplus</th>
+                                    <th>Saldo</th>
                                     <th>Piutang</th>
                                 </tr>
                             </thead>
@@ -348,32 +353,32 @@
                             </tbody>
                         </table>
                         <table id="datatable" hidden>
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Target blu</th>
-                                        <th>Pendapatan</th>
-                                        <th>Pengeluaran</th>
-                                        <th>Saldo Blu</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                  <?php foreach ($pelaksana_layanan as $a) { ?>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Target</th>
+                                    <th>Pendapatan</th>
+                                    <th>Pengeluaran</th>
+                                    <th>Saldo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($pelaksana_layanan as $a) { ?>
 
-                                   <?php $target = $this->db->query("SELECT SUM(jumlah) AS jumlah FROM target WHERE id_rumah_layanan = $a->id_rumah_layanan AND tahun = $pilih_tahun")->row();?>
-                                    <?php $realisasi = $this->db->query("SELECT SUM(t.jumlah_realisasi) AS jumlah FROM termin AS t INNER JOIN kontrak AS k ON t.id_kontrak = k.id_kontrak WHERE k.id_rumah_layanan = $a->id_rumah_layanan AND YEAR(t.tgl_pembayaran) = $pilih_tahun AND t.status_pembayaran=1")->row();?>
+                                    <?php $target = $this->db->query("SELECT SUM(jumlah) AS jumlah FROM target WHERE id_rumah_layanan = $a->id_rumah_layanan AND tahun = $pilih_tahun")->row(); ?>
+                                    <?php $realisasi = $this->db->query("SELECT SUM(t.jumlah_realisasi) AS jumlah FROM termin AS t INNER JOIN kontrak AS k ON t.id_kontrak = k.id_kontrak WHERE k.id_rumah_layanan = $a->id_rumah_layanan AND YEAR(t.tgl_pembayaran) = $pilih_tahun AND t.status_pembayaran=1")->row(); ?>
                                     <?php $pengeluaran = $this->db->query("SELECT SUM(p.jumlah_realisasi) AS jumlah FROM pengajuan AS p INNER JOIN rencana_operasional AS ro ON p.id_ro = ro.id_ro INNER JOIN kontrak AS k ON ro.id_kontrak = k.id_kontrak WHERE k.id_rumah_layanan = $a->id_rumah_layanan AND p.status_realisasi = 1 AND YEAR(p.tgl_pengajuan) = $pilih_tahun")->row(); ?>
                                     <?php $pengeluaran_rkakl = $this->db->query("SELECT SUM(p.jumlah_realisasi) AS jumlah FROM pengajuan_rkakl AS p INNER JOIN detail_rkakl AS dr ON p.id_detail_rkakl = dr.id INNER JOIN rkakl AS r ON dr.id_rkakl = r.id_rkakl INNER JOIN rumah_layanan AS rl ON r.id_layanan = rl.id_rumah_layanan WHERE r.id_layanan = '$a->id_rumah_layanan' AND p.status_realisasi = 1 AND YEAR(p.tgl_pengajuan) = $pilih_tahun")->row(); ?>
                                     <tr>
-                                        <th><?php echo $a->nama;?></th>
-                                        <td><?php echo $target->jumlah;?></td>
-                                        <td><?php echo $realisasi->jumlah;?></td>
-                                        <td><?php echo $pengeluaran->jumlah;?></td>
-                                        <td><?php echo  $surplus = $total_realisasi - $total_pengeluaran;?></td>
+                                        <th><?php echo $a->nama; ?></th>
+                                        <td><?php echo $target->jumlah; ?></td>
+                                        <td><?php echo $realisasi->jumlah; ?></td>
+                                        <td><?php echo $pengeluaran->jumlah; ?></td>
+                                        <td><?php echo  $surplus = $total_realisasi - $total_pengeluaran; ?></td>
                                     </tr>
-                                  <?php } ?>
-                                </tbody>
-                            </table>
+                                <?php } ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

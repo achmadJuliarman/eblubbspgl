@@ -111,7 +111,7 @@ class Bendahara_penerimaan extends CI_Controller {
 		$data['perusahaan'] = $this->m_kontrak->list_perusahaan()->result();
 		$data['result_client'] = $this->db->query("SELECT * FROM perusahaan WHERE id_satker = $id_satker AND kategori=5")->result();
 		$data['result_client_all'] = $this->db->query("SELECT * FROM perusahaan WHERE id_satker = $id_satker")->result();
-		$data['result'] = $this->db->query("SELECT * FROM detail_layanan WHERE id_kategori = $kategori AND id_satker = $id_satker")->result();
+		$data['result'] = $this->db->query("SELECT * FROM detail_layanan WHERE id_kategori = 4 AND id_satker = 2 AND kode_layanan LIKE 'BLK.BLU%' ")->result();
 		$data['kategori'] = $kategori;
 		$this->load->view('new_design/index',$data);
 	}

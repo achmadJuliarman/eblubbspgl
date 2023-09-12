@@ -89,8 +89,8 @@
         <p style="font-size:12px;text-align:left;line-height: 18px;margin:1px;">
           <b>
           &nbsp;KEMENTERIAN ENERGI DAN SUMBER DAYA MINERAL REPUBLIK INDONESIA <br>
-          &nbsp;BADAN LITBANG ENERGI DAN SUMBER DAYA MINERAL <br>
-          &nbsp;<?php echo $satker->nama_satker;?>
+          &nbsp;BADAN GEOLOGI<br>
+          &nbsp;BALAI BESAR SURVEI DAN PEMETAAN GEOLOGI KELAUTAN
         </b>
         </p>
     <td width="8%" style="font-size:28px;text-align:center;line-height: 25px;">&nbsp;</td>
@@ -129,9 +129,9 @@
     <td width="45%" style="font-size:12px;">&nbsp;</td>
     <td width="20%" style="font-size:12px;text-align:left"><br />Bandung, <?php echo DATE("d-m-Y"); ?><br />
 Bendahara Penerimaan<br />
-Puslitbang Teknologi Mineral dan Batubara<br><br><br><br><br>
-Agung Surya Darma<br />
-NIP. 196604132009101001
+Balai Besar Survei dan Pemetaan Geologi Kelautan<br><br><br><br><br>
+<!-- Agung Surya Darma<br />  -->
+<!-- NIP. 196604132009101001 -->
   </td>
   <td width = "5%"></td>
   </tr>

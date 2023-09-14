@@ -849,106 +849,164 @@ class Admin extends CI_Controller {
 				$this->load->view('new_design/index',$data);
 			}
 
-			function api_tekmira_harian()
+			function api_bbspgl_harian()
 			{
 				date_default_timezone_set('Asia/Jakarta');
-				$id_satker = $this->session->userdata('admin_id_satker');
-				$satker = $this->session->userdata('admin_satker');
-				$key = $this->session->userdata('admin_key_satker');
-				$url = 'https://bios.kemenkeu.go.id/api/token';
-				$data = array(
-					'satker' => $satker,
-					'key' => $key,
+				// $id_satker = $this->session->userdata('admin_id_satker');
+				// $satker = $this->session->userdata('admin_satker');
+				// $key = $this->session->userdata('admin_key_satker');
+				// $url = 'https://bios.kemenkeu.go.id/api/token';
+				// $data = array(
+				// 	'satker' => $satker,
+				// 	'key' => $key,
+				// );
+				// $tahun = date("Y");
+				// $yesterday = strtotime("yesterday");
+				// $response = $this->api_bios->get_content_token($url, json_encode($data));
+				// $response_token = json_decode($response, true);
+
+				// $penerimaan = $this->db->query("SELECT max(t.tgl_pembayaran) as tgl_transaksi, ap.kode as kd_akun, sum(t.jumlah_realisasi) as jumlah FROM termin AS t INNER JOIN kontrak AS k ON t.id_kontrak = k.id_kontrak INNER JOIN akun_penerimaan AS ap ON t.id_penerimaan = ap.id_akun WHERE k.id_satker = $id_satker AND YEAR(tgl_pembayaran) = $tahun AND t.status_pembayaran=1 GROUP BY kd_akun;")->result_array();
+				// $url = 'https://bios.kemenkeu.go.id/api/ws/keuangan/akuntansi/penerimaan';
+				// foreach ($penerimaan as $terima) {
+				// 	$dataPenerimaan = array(
+				// 		'tgl_transaksi' => $terima['tgl_transaksi'],
+				// 		'kd_akun' => $terima['kd_akun'],
+				// 		'jumlah' => $terima['jumlah'],
+				// 	);
+				// 	$responseLayanan = $this->api_bios->get_content($url, json_encode($dataPenerimaan), $response_token['token']);
+				// 	$response_bios = json_decode($responseLayanan, true);
+					
+				// 	$last_status = $response_bios['message'];
+				// 	$data = array(
+				// 		'last_status' => $last_status,
+				// 		'last_updated' => DATE("Y-m-d H:i:s")
+				// 	);
+				// 	$this->db->where('id_webservice', 1);
+				// 	$this->db->update('webservicebios', $data);
+				// }
+				$hari_ini = date("Y-m-d H:i:s");
+				$dataGetToken = array(
+					"satker" => '620044',
+					"key" => 'kP9k7gGlQGENQ4Gqtl7Pp9lSjNKDJPL8'
+				);	
+				$urlGetToken = "https://training-bios2.kemenkeu.go.id/api/token";
+				$response = $this->api_bios->get_content_token($urlGetToken, json_encode($dataGetToken)); // ini returnnya string
+				
+				// insert response ke table weservice bios
+				$dataBios = array(
+					"webservice" => "Penerimaan",
+					"periode" => "harian",
+					"last_status" => $response,
+					"last_updated" => $hari_ini,
+					"id_satker" => 2 // ini BBSPGL
 				);
-				$tahun = date("Y");
-				$yesterday = strtotime("yesterday");
-				$response = $this->api_bios->get_content_token($url, json_encode($data));
-				$response_token = json_decode($response, true);
+				$response = json_decode($response);
+				$token = $response->token;
 
-				$penerimaan = $this->db->query("SELECT max(t.tgl_pembayaran) as tgl_transaksi, ap.kode as kd_akun, sum(t.jumlah_realisasi) as jumlah FROM termin AS t INNER JOIN kontrak AS k ON t.id_kontrak = k.id_kontrak INNER JOIN akun_penerimaan AS ap ON t.id_penerimaan = ap.id_akun WHERE k.id_satker = $id_satker AND YEAR(tgl_pembayaran) = $tahun AND t.status_pembayaran=1 GROUP BY kd_akun;")->result_array();
-				$url = 'https://bios.kemenkeu.go.id/api/ws/keuangan/akuntansi/penerimaan';
-				foreach ($penerimaan as $terima) {
+				// QUERY DATA TABLE TERMIN
+				$tgl_hari_ini = date("Y-m-d");
+				$tgl_kemarin = date('Y-m-d', strtotime('-1 days', strtotime( $tgl_hari_ini ))); 
+				$termin = $this->db->query("SELECT * FROM termin 
+				INNER JOIN akun_penerimaan 
+				ON termin.id_penerimaan = akun_penerimaan.id_akun
+				WHERE tgl_termin = '$tgl_kemarin' ")->row();
+				// var_dump($tgl_kemarin);
+				// var_dump($termin);
+				// die();
+				if($termin == NULL){
 					$dataPenerimaan = array(
-						'tgl_transaksi' => $terima['tgl_transaksi'],
-						'kd_akun' => $terima['kd_akun'],
-						'jumlah' => $terima['jumlah'],
+						'kd_akun' => 424113,
+						'tgl_transaksi' => $tgl_kemarin,
+						'jumlah' => 0,
 					);
-					$responseLayanan = $this->api_bios->get_content($url, json_encode($dataPenerimaan), $response_token['token']);
-					$response_bios = json_decode($responseLayanan, true);
+					echo "Data Perimaan hari kemarin Kosong<br>";
+					var_dump($dataPenerimaan);
+				}else{
+					$dataPenerimaan = array(
+						'kd_akun' => $termin->kode,
+						'tgl_transaksi' => $termin->tgl_pembayaran, // tanggal kemarin
+						'jumlah' => $termin->jumlah_realisasi,
+					);
+					echo "Mantap, Data Penerimaan Hari kemarin ada <br>";
+					var_dump($dataPenerimaan);
+				}
+				$urlPenerimaan = 'https://training-bios2.kemenkeu.go.id/api/ws/keuangan/akuntansi/penerimaan';
+				$responseKirimPenerimaan = $this->api_bios->get_content($urlPenerimaan, json_encode($dataPenerimaan), $token);
+				$dataWebServiceBios = array(
+					"webservice" => "Penerimaan",
+					"periode" => "Harian",
+					"last_status" => $responseKirimPenerimaan,
+					"last_updated" => $hari_ini,
+					"id_satker" => 2
+				);
+				$this->db->insert('webservicebios', $dataWebServiceBios);
+				var_dump($responseKirimPenerimaan);
+				// $responseKirimPenerimaan->get_content($urlPenerimaan, '',$token);
+
+
+				// $pengeluaran = $this->db->query("SELECT sum(jmlh) AS jumlah, kd_akun, max(tanggal) as tgl_transaksi FROM( SELECT sum(p.jumlah_realisasi) as jmlh ,a.kode AS kd_akun, max(p.tgl_realisasi) as tanggal FROM pengajuan AS p INNER JOIN rencana_operasional AS ro ON p.id_ro = ro.id_ro INNER JOIN akun AS a ON ro.akun = a.id_akun INNER JOIN kontrak AS k ON ro.id_kontrak = k.id_kontrak WHERE k.id_satker = $id_satker AND p.status_realisasi = 1 AND YEAR(tgl_pengajuan)= $tahun group by kd_akun UNION ALL SELECT sum(p.jumlah_realisasi) as jmlh, a.kode AS kd_akun, max(p.tgl_realisasi) as tanggal FROM pengajuan_rkakl AS p INNER JOIN detail_rkakl AS dr ON p.id_detail_rkakl = dr.id INNER JOIN akun AS a ON dr.akun = a.id_akun INNER JOIN rkakl AS r ON dr.id_rkakl = r.id_rkakl INNER JOIN rumah_layanan AS rl ON r.id_layanan = rl.id_rumah_layanan WHERE rl.id_satker = $id_satker AND p.status_realisasi = 1 AND p.status_pengajuan = 1 AND YEAR(p.tgl_realisasi) = $tahun group by kd_akun)t GROUP by kd_akun;")->result_array();
+				// $url = 'https://bios.kemenkeu.go.id/api/ws/keuangan/akuntansi/pengeluaran';
+				// foreach ($pengeluaran as $keluar) {
+				// 	$dataPengeluaran = array(
+				// 		'tgl_transaksi' => $keluar['tgl_transaksi'],
+				// 		'kd_akun' => $keluar['kd_akun'],
+				// 		'jumlah' => $keluar['jumlah'],
+				// 	);
+				// 	$responseLayanan = $this->api_bios->get_content($url, json_encode($dataPengeluaran), $response_token['token']);
+				// 	$response_bios = json_decode($responseLayanan, true);
 					
-					$last_status = $response_bios['message'];
-					$data = array(
-						'last_status' => $last_status,
-						'last_updated' => DATE("Y-m-d H:i:s")
-					);
-					$this->db->where('id_webservice', 1);
-					$this->db->update('webservicebios', $data);
-				}
+				// 	$id_satker = $this->session->userdata('admin_id_satker');
+				// 	$last_status = $response_bios['message'];
+				// 	$data = array(
+				// 		'last_status' => $last_status,
+				// 		'last_updated' => DATE("Y-m-d H:i:s")
+				// 	);
+				// 	$this->db->where('id_webservice', 2);
+				// 	$this->db->update('webservicebios', $data);					
+				// }
 
 
-				$pengeluaran = $this->db->query("SELECT sum(jmlh) AS jumlah, kd_akun, max(tanggal) as tgl_transaksi FROM( SELECT sum(p.jumlah_realisasi) as jmlh ,a.kode AS kd_akun, max(p.tgl_realisasi) as tanggal FROM pengajuan AS p INNER JOIN rencana_operasional AS ro ON p.id_ro = ro.id_ro INNER JOIN akun AS a ON ro.akun = a.id_akun INNER JOIN kontrak AS k ON ro.id_kontrak = k.id_kontrak WHERE k.id_satker = $id_satker AND p.status_realisasi = 1 AND YEAR(tgl_pengajuan)= $tahun group by kd_akun UNION ALL SELECT sum(p.jumlah_realisasi) as jmlh, a.kode AS kd_akun, max(p.tgl_realisasi) as tanggal FROM pengajuan_rkakl AS p INNER JOIN detail_rkakl AS dr ON p.id_detail_rkakl = dr.id INNER JOIN akun AS a ON dr.akun = a.id_akun INNER JOIN rkakl AS r ON dr.id_rkakl = r.id_rkakl INNER JOIN rumah_layanan AS rl ON r.id_layanan = rl.id_rumah_layanan WHERE rl.id_satker = $id_satker AND p.status_realisasi = 1 AND p.status_pengajuan = 1 AND YEAR(p.tgl_realisasi) = $tahun group by kd_akun)t GROUP by kd_akun;")->result_array();
-				$url = 'https://bios.kemenkeu.go.id/api/ws/keuangan/akuntansi/pengeluaran';
-				foreach ($pengeluaran as $keluar) {
-					$dataPengeluaran = array(
-						'tgl_transaksi' => $keluar['tgl_transaksi'],
-						'kd_akun' => $keluar['kd_akun'],
-						'jumlah' => $keluar['jumlah'],
-					);
-					$responseLayanan = $this->api_bios->get_content($url, json_encode($dataPengeluaran), $response_token['token']);
-					$response_bios = json_decode($responseLayanan, true);
-					
-					$id_satker = $this->session->userdata('admin_id_satker');
-					$last_status = $response_bios['message'];
-					$data = array(
-						'last_status' => $last_status,
-						'last_updated' => DATE("Y-m-d H:i:s")
-					);
-					$this->db->where('id_webservice', 2);
-					$this->db->update('webservicebios', $data);					
-				}
+				// $operasional = $this->db->query("SELECT no_rekening, saldo_akhir, kdbank FROM operasional WHERE id_satker = $id_satker;")->result_array();
+				// $url = 'https://bios.kemenkeu.go.id/api/ws/keuangan/saldo/saldo_operasional';
+				// foreach ($operasional as $ops) {
+				// 	$dataOperasional = array(
+				// 		'tgl_transaksi' => date('Y-m-d', $yesterday),
+				// 		'no_rekening' => $ops['no_rekening'],
+				// 		'saldo_akhir' => $ops['saldo_akhir'],
+				// 		'kdbank' => $ops['kdbank']
+				// 	);
+				// 	$responseLayanan = $this->api_bios->get_content($url, json_encode($dataOperasional), $response_token['token']);
+				// 	$response_bios = json_decode($responseLayanan, true);
+				// 	$last_status = $response_bios['message'];
+				// 	$data = array(
+				// 		'last_status' => $last_status,
+				// 		'last_updated' => DATE("Y-m-d H:i:s")
+				// 	);
+				// 	$this->db->where('id_webservice', 3);
+				// 	$this->db->update('webservicebios', $data);
+				// }
 
 
-				$operasional = $this->db->query("SELECT no_rekening, saldo_akhir, kdbank FROM operasional WHERE id_satker = $id_satker;")->result_array();
-				$url = 'https://bios.kemenkeu.go.id/api/ws/keuangan/saldo/saldo_operasional';
-				foreach ($operasional as $ops) {
-					$dataOperasional = array(
-						'tgl_transaksi' => date('Y-m-d', $yesterday),
-						'no_rekening' => $ops['no_rekening'],
-						'saldo_akhir' => $ops['saldo_akhir'],
-						'kdbank' => $ops['kdbank']
-					);
-					$responseLayanan = $this->api_bios->get_content($url, json_encode($dataOperasional), $response_token['token']);
-					$response_bios = json_decode($responseLayanan, true);
-					$last_status = $response_bios['message'];
-					$data = array(
-						'last_status' => $last_status,
-						'last_updated' => DATE("Y-m-d H:i:s")
-					);
-					$this->db->where('id_webservice', 3);
-					$this->db->update('webservicebios', $data);
-				}
-
-
-				$deposito = $this->db->query("SELECT no_bilyet, nilai_deposito, nilai_bunga FROM deposito WHERE id_satker = 1;")->result_array();
-				$url = 'https://bios.kemenkeu.go.id/api/ws/keuangan/saldo/saldo_pengelolaan_kas';
-				foreach ($deposito as $deposit) {
-					$dataDeposit = array(
-						'tgl_transaksi' => date('Y-m-d', $yesterday),
-						'no_bilyet' => $deposit['no_bilyet'],
-						'nilai_deposito' => $deposit['nilai_deposito'],
-						'nilai_bunga' => $deposit['nilai_bunga'],
-					);
-					$responseLayanan = $this->api_bios->get_content($url, json_encode($dataDeposit), $response_token['token']);
-					$response_bios = json_decode($responseLayanan, true);
-					$last_status = $response_bios['message'];
-					$data = array(
-						'last_status' => $last_status,
-						'last_updated' => DATE("Y-m-d H:i:s")
-					);
-					$this->db->where('id_webservice', 4);
-					$this->db->update('webservicebios', $data);
-					//var_dump($responseLayanan);
-				}
+				// $deposito = $this->db->query("SELECT no_bilyet, nilai_deposito, nilai_bunga FROM deposito WHERE id_satker = 1;")->result_array();
+				// $url = 'https://bios.kemenkeu.go.id/api/ws/keuangan/saldo/saldo_pengelolaan_kas';
+				// foreach ($deposito as $deposit) {
+				// 	$dataDeposit = array(
+				// 		'tgl_transaksi' => date('Y-m-d', $yesterday),
+				// 		'no_bilyet' => $deposit['no_bilyet'],
+				// 		'nilai_deposito' => $deposit['nilai_deposito'],
+				// 		'nilai_bunga' => $deposit['nilai_bunga'],
+				// 	);
+				// 	$responseLayanan = $this->api_bios->get_content($url, json_encode($dataDeposit), $response_token['token']);
+				// 	$response_bios = json_decode($responseLayanan, true);
+				// 	$last_status = $response_bios['message'];
+				// 	$data = array(
+				// 		'last_status' => $last_status,
+				// 		'last_updated' => DATE("Y-m-d H:i:s")
+				// 	);
+				// 	$this->db->where('id_webservice', 4);
+				// 	$this->db->update('webservicebios', $data);
+				// 	//var_dump($responseLayanan);
+				// }
 
 				redirect('admin/bios','refresh');
 			}

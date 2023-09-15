@@ -884,6 +884,11 @@ class Admin extends CI_Controller {
 				// 	$this->db->where('id_webservice', 1);
 				// 	$this->db->update('webservicebios', $data);
 				// }
+
+				// ===========================================
+				// NEW CODES PENERIMAAN
+				// ===========================================
+
 				$hari_ini = date("Y-m-d H:i:s");
 				$dataGetToken = array(
 					"satker" => '620044',
@@ -891,7 +896,7 @@ class Admin extends CI_Controller {
 				);	
 				$urlGetToken = "https://training-bios2.kemenkeu.go.id/api/token";
 				$response = $this->api_bios->get_content_token($urlGetToken, json_encode($dataGetToken)); // ini returnnya string
-				
+
 				// insert response ke table weservice bios
 				$dataBios = array(
 					"webservice" => "Penerimaan",
@@ -906,6 +911,10 @@ class Admin extends CI_Controller {
 				// QUERY DATA TABLE TERMIN
 				$tgl_hari_ini = date("Y-m-d");
 				$tgl_kemarin = date('Y-m-d', strtotime('-1 days', strtotime( $tgl_hari_ini ))); 
+
+				// for ($i=0; $i < ; $i++) { 
+				// 	// code...
+				// }
 				$termin = $this->db->query("SELECT * FROM termin 
 				INNER JOIN akun_penerimaan 
 				ON termin.id_penerimaan = akun_penerimaan.id_akun
@@ -941,7 +950,39 @@ class Admin extends CI_Controller {
 				);
 				$this->db->insert('webservicebios', $dataWebServiceBios);
 				var_dump($responseKirimPenerimaan);
-				// $responseKirimPenerimaan->get_content($urlPenerimaan, '',$token);
+
+				// =========================================================================
+				// FOREACH UNTUK MEMASUKKAN LOG YANG SEBELUM HARI KEMARIN YANG BELUM DIMASUKKAN KE TABLE WEBSERVICEBIOS
+				// =========================================================================
+				// $hari_ini = date("Y-m-d H:i:s");
+				// $dataGetToken = array(
+				// 	"satker" => '620044',
+				// 	"key" => 'kP9k7gGlQGENQ4Gqtl7Pp9lSjNKDJPL8'
+				// );	
+				// $urlGetToken = "https://training-bios2.kemenkeu.go.id/api/token";
+				// $response = $this->api_bios->get_content_token($urlGetToken, json_encode($dataGetToken)); 
+				// $response = json_decode($response);
+				// $token = $response->token;
+				// $all_termin = $this->db->query('SELECT * FROM termin 
+				// INNER JOIN akun_penerimaan 
+				// ON termin.id_penerimaan = akun_penerimaan.id_akun')->result();
+				// foreach ($all_termin as $t) { 
+				// 	$dataPenerimaan = array(
+				// 		'kd_akun' => $t->kode,
+				// 		'tgl_transaksi' => $t->tgl_pembayaran, // tanggal kemarin
+				// 		'jumlah' => $t->jumlah_realisasi,
+				// 	);
+				// 	$urlPenerimaan = 'https://training-bios2.kemenkeu.go.id/api/ws/keuangan/akuntansi/penerimaan';
+				// 	$responseKirimPenerimaan = $this->api_bios->get_content($urlPenerimaan, json_encode($dataPenerimaan), $token);
+				// 	$dataWebServiceBios = array(
+				// 		"webservice" => "Penerimaan",
+				// 		"periode" => "Harian",
+				// 		"last_status" => $responseKirimPenerimaan,
+				// 		"last_updated" => $hari_ini,
+				// 		"id_satker" => 2
+				// 	);
+				// 	$this->db->insert('webservicebios', $dataWebServiceBios);
+				// }
 
 
 				// $pengeluaran = $this->db->query("SELECT sum(jmlh) AS jumlah, kd_akun, max(tanggal) as tgl_transaksi FROM( SELECT sum(p.jumlah_realisasi) as jmlh ,a.kode AS kd_akun, max(p.tgl_realisasi) as tanggal FROM pengajuan AS p INNER JOIN rencana_operasional AS ro ON p.id_ro = ro.id_ro INNER JOIN akun AS a ON ro.akun = a.id_akun INNER JOIN kontrak AS k ON ro.id_kontrak = k.id_kontrak WHERE k.id_satker = $id_satker AND p.status_realisasi = 1 AND YEAR(tgl_pengajuan)= $tahun group by kd_akun UNION ALL SELECT sum(p.jumlah_realisasi) as jmlh, a.kode AS kd_akun, max(p.tgl_realisasi) as tanggal FROM pengajuan_rkakl AS p INNER JOIN detail_rkakl AS dr ON p.id_detail_rkakl = dr.id INNER JOIN akun AS a ON dr.akun = a.id_akun INNER JOIN rkakl AS r ON dr.id_rkakl = r.id_rkakl INNER JOIN rumah_layanan AS rl ON r.id_layanan = rl.id_rumah_layanan WHERE rl.id_satker = $id_satker AND p.status_realisasi = 1 AND p.status_pengajuan = 1 AND YEAR(p.tgl_realisasi) = $tahun group by kd_akun)t GROUP by kd_akun;")->result_array();

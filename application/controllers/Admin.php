@@ -908,9 +908,6 @@ class Admin extends CI_Controller {
 				$response = json_decode($response);
 				$token = $response->token;
 
-				$penerimaan = $this->db->query("SELECT max(t.tgl_pembayaran) as tgl_transaksi, ap.kode as kd_akun, sum(t.jumlah_realisasi) as jumlah FROM termin AS t INNER JOIN kontrak AS k ON t.id_kontrak = k.id_kontrak INNER JOIN akun_penerimaan AS ap ON t.id_penerimaan = ap.id_akun WHERE k.id_satker = $id_satker AND YEAR(tgl_pembayaran) = $tahun AND t.status_pembayaran=1 GROUP BY kd_akun;")->result_array();
-				$url = 'https://training-bios2.kemenkeu.go.id/api/get/data/status';
-				foreach ($penerimaan as $terima) {
 				// QUERY DATA TABLE TERMIN
 				$tgl_hari_ini = date("Y-m-d");
 				$tgl_kemarin = date('Y-m-d', strtotime('-1 days', strtotime( $tgl_hari_ini ))); 
@@ -926,7 +923,6 @@ class Admin extends CI_Controller {
 				// var_dump($termin);
 				// die();
 				if($termin == NULL){
-					
 					$dataPenerimaan = array(
 						'kd_akun' => 424113,
 						'tgl_transaksi' => $tgl_kemarin,

@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo base_url(); ?>favicon.ico">
-    <title>MONIKA - BLU BALITBANG ESDM</title>
+    <title>eBLU - BBSPGL</title>
+    <link rel="icon" type="image/x-icon" href="assets/esdm.png">
     <link href="<?php echo base_url();?>assets/new/dist/css/style.css" rel="stylesheet">
     <!-- This page CSS -->
     <link href="<?php echo base_url();?>assets/new/dist/css/pages/authentication.css" rel="stylesheet">

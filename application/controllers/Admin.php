@@ -866,7 +866,7 @@ class Admin extends CI_Controller {
 				$response_token = json_decode($response, true);
 
 				$penerimaan = $this->db->query("SELECT max(t.tgl_pembayaran) as tgl_transaksi, ap.kode as kd_akun, sum(t.jumlah_realisasi) as jumlah FROM termin AS t INNER JOIN kontrak AS k ON t.id_kontrak = k.id_kontrak INNER JOIN akun_penerimaan AS ap ON t.id_penerimaan = ap.id_akun WHERE k.id_satker = $id_satker AND YEAR(tgl_pembayaran) = $tahun AND t.status_pembayaran=1 GROUP BY kd_akun;")->result_array();
-				$url = 'https://bios.kemenkeu.go.id/api/ws/keuangan/akuntansi/penerimaan';
+				$url = 'https://training-bios2.kemenkeu.go.id/api/get/data/status';
 				foreach ($penerimaan as $terima) {
 					$dataPenerimaan = array(
 						'tgl_transaksi' => $terima['tgl_transaksi'],
